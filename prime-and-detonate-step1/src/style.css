@@ -495,7 +495,6 @@ html.no-scroll, body.no-scroll {
   right: 0;
   z-index: 9999;
   background: #0b0f1a;
-  border-top: 3px solid #3b82f6;
   padding: 16px max(12px, env(safe-area-inset-left)) 16px max(12px, env(safe-area-inset-right));
   padding-bottom: max(16px, calc(16px + env(safe-area-inset-bottom)));
   box-sizing: border-box;
@@ -1966,7 +1965,6 @@ html, body {
   justify-content: space-between; 
   padding: 12px max(16px, env(safe-area-inset-left)) 12px max(16px, env(safe-area-inset-right)); /* Safe area aware */
   background: rgba(8,12,20,0.95); 
-  border-top: 1px solid #1f2a3a; 
   backdrop-filter: blur(8px);
   margin: 0; /* Remove negative margins */
   width: 100%; /* Full width */

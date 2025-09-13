@@ -452,7 +452,6 @@ export const LoadoutScreen: React.FC<Props> = ({ initialCharacters, initialAbili
         right: 0,
         zIndex: 9999,
         background: '#0b0f1a',
-        borderTop: '3px solid #3b82f6',
         padding: '16px max(12px, env(safe-area-inset-left)) 16px max(12px, env(safe-area-inset-right))',
         paddingBottom: 'max(16px, calc(16px + env(safe-area-inset-bottom)))',
         boxSizing: 'border-box',
@@ -461,16 +460,6 @@ export const LoadoutScreen: React.FC<Props> = ({ initialCharacters, initialAbili
         maxWidth: '100vw',
         boxShadow: '0 -4px 20px rgba(0,0,0,0.8)'
       }}>
-        {/* Debug indicator - remove in production */}
-        <div style={{ 
-          position: 'absolute', 
-          top: 0, 
-          left: 0, 
-          right: 0, 
-          height: '4px', 
-          background: '#ef4444',
-          zIndex: 10000
-        }}></div>
         
         {/* Row 1: Character Info and Clear Button */}
         <div style={{ 
