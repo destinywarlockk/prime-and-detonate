@@ -158,3 +158,4 @@ Validation rules
 - Numeric ranges: splash factors 0..1, multipliers > 0, costs ≥ 0.
 
 
+

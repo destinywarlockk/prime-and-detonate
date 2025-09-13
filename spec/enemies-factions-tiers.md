@@ -48,3 +48,4 @@ AI sketch
 - chooseEnemyAction considers: primers, detonators, nukes; prefers detonators on primed targets; low-HP defensive leaning; allies with detonators → prefer priming; prioritized targets by low SH/HP.
 
 
+

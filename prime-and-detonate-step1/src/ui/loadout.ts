@@ -516,7 +516,7 @@ export function mountLoadout(
               ${weapon.superGainMult ? `Super x${weapon.superGainMult.toFixed(2)}` : ''}
             </div>
           </div>
-          <span class="${elementClass}" style="border: 2px solid red !important; background: yellow !important; color: black !important;">${elementName}</span>
+          <span class="${elementClass}">${elementName}</span>
         </button>
       `;
     }).join('');
