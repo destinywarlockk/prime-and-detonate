@@ -499,8 +499,6 @@ export function mountLoadout(
       const elementClass = `weapon-element weapon-element--${elementType}`;
       const elementName = elementType.charAt(0).toUpperCase() + elementType.slice(1);
       
-      console.log(`Weapon ${weapon.name}:`, { elementType, elementClass, elementName });
-      
       return `
         <button class="weapon-option ${isSelected ? 'is-selected' : ''}" 
                 data-action="select-weapon" 
@@ -509,11 +507,11 @@ export function mountLoadout(
           <div class="weapon-info">
             <div class="weapon-name">${weapon.name}</div>
             <div class="weapon-stats">
-              ${weapon.basicMult ? `Basic x${weapon.basicMult.toFixed(2)}` : ''}
-              ${weapon.totalDamageMult ? `Damage x${weapon.totalDamageMult.toFixed(2)}` : ''}
-              ${weapon.maxHpBonus ? `+${weapon.maxHpBonus} HP` : ''}
-              ${weapon.maxShBonus ? `+${weapon.maxShBonus} SH` : ''}
-              ${weapon.superGainMult ? `Super x${weapon.superGainMult.toFixed(2)}` : ''}
+              ${weapon.basicMult ? `<div>Basic x${weapon.basicMult.toFixed(2)}</div>` : ''}
+              ${weapon.totalDamageMult ? `<div>Damage x${weapon.totalDamageMult.toFixed(2)}</div>` : ''}
+              ${weapon.maxHpBonus ? `<div>+${weapon.maxHpBonus} HP</div>` : ''}
+              ${weapon.maxShBonus ? `<div>+${weapon.maxShBonus} SH</div>` : ''}
+              ${weapon.superGainMult ? `<div>Super x${weapon.superGainMult.toFixed(2)}</div>` : ''}
             </div>
           </div>
           <span class="${elementClass}">${elementName}</span>

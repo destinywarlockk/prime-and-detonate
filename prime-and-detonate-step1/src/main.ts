@@ -5,8 +5,22 @@ import { mountApp } from './ui/app';
 import { ALL_ABILITIES } from './content/abilities';
 import { ALL_WEAPONS } from './content/weapons';
 import { CHARACTER_ROSTER } from './content/characters';
-import type { AppState, LoadoutState, BattleState } from './game/types';
+import type { AppState, LoadoutState, BattleState, Weapon } from './game/types';
 import { missionNeonMarket } from './content/missions';
+
+// Merge persisted weapon data with current weapon definitions to ensure all properties are up-to-date
+function mergeWeaponData(persistedWeapons: Weapon[], currentWeapons: Weapon[]): Weapon[] {
+  const currentWeaponMap = new Map(currentWeapons.map(w => [w.id, w]));
+  
+  return persistedWeapons.map(persistedWeapon => {
+    const currentWeapon = currentWeaponMap.get(persistedWeapon.id);
+    if (currentWeapon) {
+      // Merge persisted data with current definition, keeping persisted values but adding missing properties
+      return { ...currentWeapon, ...persistedWeapon };
+    }
+    return persistedWeapon;
+  });
+}
 
 const persisted = loadPersistedLoadout(CHARACTER_ROSTER, ALL_ABILITIES);
 
@@ -22,7 +36,7 @@ const initial: AppState = {
     allAbilities: ALL_ABILITIES,
     selectedByChar: persisted?.selectedByChar ?? {},
     loadoutActiveIndex: persisted?.loadoutActiveIndex ?? 0,
-    allWeapons: persisted?.allWeapons ?? ALL_WEAPONS,
+    allWeapons: mergeWeaponData(persisted?.allWeapons ?? ALL_WEAPONS, ALL_WEAPONS),
     selectedWeaponByChar: persisted?.selectedWeaponByChar ?? {},
   },
   battle: {

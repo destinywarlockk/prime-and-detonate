@@ -2209,7 +2209,7 @@ html, body {
 /* Weapon grid styling */
 .weapon-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 10px;
   padding: 0 2px;
   width: 100%;
@@ -3549,17 +3549,21 @@ html, body, #app, #app-wrap {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 6px 10px;
-  font-size: 12px;
+  padding: 4px 8px;
+  font-size: 10px;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
-  border-radius: 6px;
+  letter-spacing: 0.3px;
+  border-radius: 4px;
   border: 1px solid;
   white-space: nowrap;
   line-height: 1;
   margin-top: auto;
   align-self: flex-end;
+  min-width: 60px;
+  text-align: center;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
 .weapon-element--kinetic {
@@ -3586,6 +3590,48 @@ html, body, #app, #app-wrap {
   border-color: rgba(168, 85, 247, 0.6);
 }
 
+/* Responsive weapon element styles */
+@media (min-width: 768px) {
+  .weapon-element {
+    padding: 6px 10px;
+    font-size: 11px;
+    letter-spacing: 0.4px;
+    border-radius: 5px;
+    min-width: 70px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .weapon-element {
+    padding: 6px 12px;
+    font-size: 12px;
+    letter-spacing: 0.5px;
+    border-radius: 6px;
+    min-width: 80px;
+  }
+}
+
+/* Mobile-specific adjustments */
+@media (max-width: 480px) {
+  .weapon-element {
+    padding: 3px 6px;
+    font-size: 9px;
+    letter-spacing: 0.2px;
+    border-radius: 3px;
+    min-width: 50px;
+  }
+}
+
+@media (max-width: 375px) {
+  .weapon-element {
+    padding: 2px 4px;
+    font-size: 8px;
+    letter-spacing: 0.1px;
+    border-radius: 2px;
+    min-width: 45px;
+  }
+}
+
 /* Weapon selection UI styles */
 .weapon-selection {
   margin: 16px 0;
@@ -3604,23 +3650,93 @@ html, body, #app, #app-wrap {
 
 .weapon-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 8px;
+  padding: 0 4px;
+}
+
+/* Responsive weapon grid */
+@media (min-width: 768px) {
+  .weapon-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .weapon-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .weapon-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px;
+  }
+}
+
+@media (max-width: 375px) {
+  .weapon-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 4px;
+  }
 }
 
 .weapon-option {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  padding: 12px;
+  gap: 6px;
+  padding: 10px;
   background: rgba(30, 41, 59, 0.8);
   border: 1px solid rgba(148, 163, 184, 0.3);
-  border-radius: 8px;
+  border-radius: 6px;
   cursor: pointer;
   transition: all 0.2s ease;
   text-align: left;
-  min-height: 120px;
+  min-height: 140px;
   justify-content: space-between;
+  width: 100%;
+  box-sizing: border-box;
+  overflow: visible;
+}
+
+/* Responsive weapon option */
+@media (min-width: 768px) {
+  .weapon-option {
+    gap: 8px;
+    padding: 12px;
+    border-radius: 8px;
+    min-height: 160px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .weapon-option {
+    gap: 10px;
+    padding: 14px;
+    border-radius: 10px;
+    min-height: 180px;
+  }
+}
+
+@media (max-width: 480px) {
+  .weapon-option {
+    gap: 4px;
+    padding: 8px;
+    border-radius: 4px;
+    min-height: 120px;
+  }
+}
+
+@media (max-width: 375px) {
+  .weapon-option {
+    gap: 3px;
+    padding: 6px;
+    border-radius: 3px;
+    min-height: 110px;
+  }
 }
 
 .weapon-option:hover {
@@ -3637,6 +3753,10 @@ html, body, #app, #app-wrap {
 
 .weapon-info {
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-height: 0;
 }
 
 .weapon-name {
@@ -3649,6 +3769,10 @@ html, body, #app, #app-wrap {
   font-size: 12px;
   color: #cbd5e1;
   line-height: 1.4;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-top: 4px;
 }
 
 /* Loadout-specific weapon element styles - higher specificity than battle styles */
@@ -3656,17 +3780,70 @@ html, body, #app, #app-wrap {
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
-  padding: 6px 10px !important;
-  font-size: 12px !important;
+  padding: 4px 8px !important;
+  font-size: 10px !important;
   font-weight: 700 !important;
   text-transform: uppercase !important;
-  letter-spacing: 0.5px !important;
-  border-radius: 6px !important;
+  letter-spacing: 0.3px !important;
+  border-radius: 4px !important;
   border: 1px solid !important;
   white-space: nowrap !important;
   line-height: 1 !important;
   margin-top: auto !important;
   align-self: flex-end !important;
+  flex-shrink: 0 !important;
+  min-height: 24px !important;
+  min-width: 60px !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  text-align: center !important;
+  transition: all 0.2s ease !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Responsive loadout weapon element styles */
+@media (min-width: 768px) {
+  .loadout-screen .weapon-element {
+    padding: 6px 10px !important;
+    font-size: 11px !important;
+    letter-spacing: 0.4px !important;
+    border-radius: 5px !important;
+    min-width: 70px !important;
+    min-height: 26px !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  .loadout-screen .weapon-element {
+    padding: 6px 12px !important;
+    font-size: 12px !important;
+    letter-spacing: 0.5px !important;
+    border-radius: 6px !important;
+    min-width: 80px !important;
+    min-height: 28px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .loadout-screen .weapon-element {
+    padding: 3px 6px !important;
+    font-size: 9px !important;
+    letter-spacing: 0.2px !important;
+    border-radius: 3px !important;
+    min-width: 50px !important;
+    min-height: 20px !important;
+  }
+}
+
+@media (max-width: 375px) {
+  .loadout-screen .weapon-element {
+    padding: 2px 4px !important;
+    font-size: 8px !important;
+    letter-spacing: 0.1px !important;
+    border-radius: 2px !important;
+    min-width: 45px !important;
+    min-height: 18px !important;
+  }
 }
 
 .loadout-screen .weapon-element--kinetic {
@@ -3691,4 +3868,23 @@ html, body, #app, #app-wrap {
   background: rgba(168, 85, 247, 0.8) !important;
   color: #581c87 !important;
   border-color: rgba(168, 85, 247, 0.6) !important;
+}
+
+/* Prevent overlap between weapon name and element badge in loadout weapon cards */
+.loadout-screen .ability .ability-header {
+  justify-content: flex-start; /* allow content to flow with gap instead of stretching */
+  gap: 8px;
+}
+
+.loadout-screen .ability .ability-header .ability-name {
+  flex: 1;            /* take remaining space */
+  min-width: 0;       /* allow flexbox to shrink properly */
+  white-space: nowrap;/* keep on one line */
+  overflow: hidden;   /* prevent text from spilling under badge */
+  text-overflow: ellipsis; /* show ellipsis when truncated */
+}
+
+.loadout-screen .ability .ability-header .weapon-element-badge {
+  flex-shrink: 0;     /* keep badge size constant */
+  align-self: flex-start;
 }
