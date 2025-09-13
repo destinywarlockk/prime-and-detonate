@@ -1,0 +1,46 @@
+name: Deploy to Hostinger
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: 'prime-and-detonate-step1/package-lock.json'
+        
+    - name: Install dependencies
+      run: |
+        cd prime-and-detonate-step1
+        npm ci
+        
+    - name: Build project
+      run: |
+        cd prime-and-detonate-step1
+        npm run build
+        
+    - name: Deploy to Hostinger via FTP
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+      with:
+        server: ${{ secrets.HOSTINGER_FTP_HOST }}
+        username: ${{ secrets.HOSTINGER_FTP_USER }}
+        password: ${{ secrets.HOSTINGER_FTP_PASS }}
+        local-dir: prime-and-detonate-step1/dist/
+        server-dir: public_html/
+        exclude: |
+          **/.git*
+          **/.git*/**
+          **/node_modules/**
+          **/.env
+          **/.env.*
