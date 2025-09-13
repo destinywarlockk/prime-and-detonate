@@ -1,3 +1,4 @@
+// Prime & Detonate - Deployed via GitHub Actions
 import { createStore } from './state/store';
 import { loadPersistedLoadout, persistLoadout, loadPersistedMissions, persistMissions } from './state/persist';
 import { mountApp } from './ui/app';
