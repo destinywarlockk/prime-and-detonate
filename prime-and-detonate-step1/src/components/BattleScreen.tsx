@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import type { AppState, BattleState, Ability, Actor, PartyMember, ClassId } from '../game/types';
 import { getEnemyInstance } from '../../engine/combat/registry';
 import { playerAttack, enemyAttack, canCastSuper, castSuper, castSuperAnytime, getSuperTier, BalanceSustain, checkVictoryCondition, findNextValidTarget } from '../game/engine';
@@ -54,6 +54,17 @@ type Props = {
 
 export function BattleScreen({ state, setState }: Props) {
   const battle = state.battle;
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // Bind FX to app wrap for battle effects
+  useEffect(() => {
+    try {
+      const appWrap = document.getElementById('app-wrap') as any;
+      if (appWrap && (window as any).BattleFX?.bindCanvas) {
+        (window as any).BattleFX.bindCanvas(appWrap);
+      }
+    } catch {}
+  }, []);
 
   // Format numbers for UI
   const fmt = (n: number): string => {
@@ -89,13 +100,56 @@ export function BattleScreen({ state, setState }: Props) {
     }));
   };
 
-  const handleEndTurn = () => {
-    // This would trigger the enemy turn logic
+  const handleAttack = () => {
+    if (!battle.selectedAbilityId || battle.turn !== 'player') return;
+
+    // Use the existing battle engine - it takes the entire battle state
+    const result = playerAttack(battle);
+    
     setState(state => ({
-      battle: {
-        ...state.battle,
-        turn: 'enemy'
-      }
+      battle: result
+    }));
+
+    // Check victory condition
+    const victoryCheck = checkVictoryCondition(result);
+    
+    if (victoryCheck) {
+      setState(state => ({
+        battle: {
+          ...state.battle,
+          isOver: true,
+          log: [...state.battle.log, 'Victory!']
+        }
+      }));
+    }
+  };
+
+  const handleEndTurn = () => {
+    if (battle.turn === 'player') {
+      setState(state => ({
+        battle: {
+          ...state.battle,
+          turn: 'enemy',
+          activePartyIndex: 0
+        }
+      }));
+      
+      // Process enemy turn
+      setTimeout(() => {
+        processEnemyTurn();
+      }, 1000);
+    }
+  };
+
+  const processEnemyTurn = () => {
+    const aliveEnemies = battle.enemies.filter(enemy => enemy.bars.hp > 0);
+    if (aliveEnemies.length === 0) return;
+
+    // Use the existing battle engine for enemy attacks
+    const result = enemyAttack(battle);
+    
+    setState(state => ({
+      battle: result
     }));
   };
 
@@ -103,9 +157,10 @@ export function BattleScreen({ state, setState }: Props) {
     const abilities = member.abilityIds.map(id => ABILITY_BY_ID[id]).filter(Boolean);
     const weapon = member.weaponId ? WEAPON_BY_ID[member.weaponId] : null;
     const classIcon = CLASS_ICON[member.classId];
+    const isActive = battle.turn === 'player' && battle.activePartyIndex === index;
 
     return (
-      <div key={member.actorId} className="party-member-card">
+      <div key={member.actorId} className={`party-member-card ${isActive ? 'active' : ''}`}>
         <div className="member-header">
           <img src={classIcon} alt={member.classId} className="class-icon" />
           <div className="member-info">
@@ -123,6 +178,7 @@ export function BattleScreen({ state, setState }: Props) {
               key={ability.id}
               className={`ability-btn ${battle.selectedAbilityId === ability.id ? 'selected' : ''}`}
               onClick={() => handleAbilityClick(ability.id)}
+              disabled={battle.turn !== 'player' || !isActive}
             >
               {ability.name}
             </button>
@@ -139,12 +195,13 @@ export function BattleScreen({ state, setState }: Props) {
 
   const renderEnemy = (enemy: Actor, index: number) => {
     const icon = resolveEnemyIcon(enemy.name, enemy);
+    const isDead = enemy.bars.hp <= 0;
     
     return (
       <div 
         key={enemy.id} 
-        className={`enemy-card ${battle.targetIndex === index ? 'targeted' : ''}`}
-        onClick={() => handleEnemyClick(index)}
+        className={`enemy-card ${battle.targetIndex === index ? 'targeted' : ''} ${isDead ? 'dead' : ''}`}
+        onClick={() => !isDead && handleEnemyClick(index)}
       >
         <div className="enemy-header">
           {icon && <img src={icon} alt={enemy.name} className="enemy-icon" />}
@@ -164,6 +221,25 @@ export function BattleScreen({ state, setState }: Props) {
       </div>
     );
   };
+
+  if (battle.isOver) {
+    return (
+      <div className="battle-screen">
+        <div className="victory-screen">
+          <h1>Victory!</h1>
+          <p>The battle is won! Your tactical prowess has secured victory against all odds.</p>
+          <div className="victory-actions">
+            <button className="btn btn-primary" onClick={handleReturnToLoadout}>
+              Return to Loadout
+            </button>
+            <button className="btn" onClick={handleMissionSelect}>
+              Mission Select
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -220,7 +296,13 @@ export function BattleScreen({ state, setState }: Props) {
             box-shadow: 0 0 10px rgba(59, 130, 246, 0.3);
           }
           
-          .enemy-card:hover {
+          .enemy-card.dead {
+            opacity: 0.3;
+            filter: grayscale(80%);
+            cursor: default;
+          }
+          
+          .enemy-card:hover:not(.dead) {
             background: #334155;
           }
           
@@ -241,6 +323,12 @@ export function BattleScreen({ state, setState }: Props) {
             padding: 1rem;
             min-width: 200px;
             flex: 1;
+            border: 2px solid transparent;
+          }
+          
+          .party-member-card.active {
+            border-color: #10b981;
+            box-shadow: 0 0 10px rgba(16, 185, 129, 0.3);
           }
           
           .member-header {
@@ -286,13 +374,18 @@ export function BattleScreen({ state, setState }: Props) {
             transition: all 0.2s;
           }
           
-          .ability-btn:hover {
+          .ability-btn:hover:not(:disabled) {
             background: #4b5563;
           }
           
           .ability-btn.selected {
             background: #3b82f6;
             border-color: #2563eb;
+          }
+          
+          .ability-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
           }
           
           .member-weapon {
@@ -344,14 +437,41 @@ export function BattleScreen({ state, setState }: Props) {
           .btn-primary:hover {
             background: #2563eb;
           }
+          
+          .victory-screen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            text-align: center;
+            padding: 2rem;
+          }
+          
+          .victory-screen h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #10b981;
+          }
+          
+          .victory-screen p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.8;
+          }
+          
+          .victory-actions {
+            display: flex;
+            gap: 1rem;
+          }
         `}
       </style>
-      <div className="battle-screen">
+      <div className="battle-screen" ref={containerRef}>
         <div className="battle-header">
           <button className="btn" onClick={handleReturnToLoadout}>
             Back to Loadout
           </button>
-          <div className="battle-title">Battle</div>
+          <div className="battle-title">Battle - {battle.turn === 'player' ? 'Your Turn' : 'Enemy Turn'}</div>
           <button className="btn" onClick={handleMissionSelect}>
             Missions
           </button>
@@ -384,7 +504,12 @@ export function BattleScreen({ state, setState }: Props) {
         </div>
         
         <div className="battle-controls">
-          <button className="btn btn-primary" onClick={handleEndTurn}>
+          {battle.turn === 'player' && battle.selectedAbilityId && (
+            <button className="btn btn-primary" onClick={handleAttack}>
+              Attack!
+            </button>
+          )}
+          <button className="btn" onClick={handleEndTurn}>
             End Turn
           </button>
         </div>
