@@ -1,0 +1,30 @@
+import React from 'react';
+import type { AppState } from '../game/types';
+
+type Props = {
+  state: AppState;
+  setState: (updater: Partial<AppState> | ((s: AppState) => Partial<AppState>)) => void;
+};
+
+export function BattleScreen({ state, setState }: Props) {
+  const handleBackToLoadout = () => {
+    setState({ screen: 'loadout' });
+  };
+
+  return (
+    <div className="min-h-[100dvh] w-full bg-slate-950 text-slate-100 p-6">
+      <div className="max-w-4xl mx-auto">
+        <h1 className="text-3xl font-bold mb-6">Battle</h1>
+        <div className="text-center">
+          <p className="text-slate-400 mb-4">Battle screen - React version coming soon!</p>
+          <button 
+            className="big"
+            onClick={handleBackToLoadout}
+          >
+            Back to Loadout
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}

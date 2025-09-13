@@ -1,7 +1,9 @@
 // Prime & Detonate - Deployed via GitHub Actions
+import React from 'react';
+import { createRoot } from 'react-dom/client';
 import { createStore } from './state/store';
 import { loadPersistedLoadout, persistLoadout, loadPersistedMissions, persistMissions } from './state/persist';
-import { mountApp } from './ui/app';
+import { App } from './App';
 import { ALL_ABILITIES } from './content/abilities';
 import { ALL_WEAPONS } from './content/weapons';
 import { CHARACTER_ROSTER } from './content/characters';
@@ -60,7 +62,15 @@ initial.mission = persistedMissions ?? { completed: {}, current: missionNeonMark
 const store = createStore<AppState>(initial);
 
 const app = document.getElementById('app')!;
-mountApp(app, store.getState, store.setState, store.subscribe);
+const root = createRoot(app);
+
+// Subscribe to state changes and re-render
+store.subscribe((state) => {
+  root.render(<App state={state} setState={store.setState} />);
+});
+
+// Initial render
+root.render(<App state={store.getState()} setState={store.setState} />);
 
 // Persist loadout changes
 store.subscribe((state) => {
