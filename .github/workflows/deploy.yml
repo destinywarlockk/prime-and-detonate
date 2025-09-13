@@ -1,4 +1,4 @@
-name: Deploy to Hostinger
+name: Build and Deploy to Hostinger
 
 on:
   push:
@@ -6,12 +6,15 @@ on:
   workflow_dispatch:
 
 jobs:
-  deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
     
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        fetch-depth: 0
       
     - name: Setup Node.js
       uses: actions/setup-node@v4
@@ -30,17 +33,26 @@ jobs:
         cd prime-and-detonate-step1
         npm run build
         
-    - name: Deploy to Hostinger via FTP
-      uses: SamKirkland/FTP-Deploy-Action@v4.3.4
-      with:
-        server: ${{ secrets.HOSTINGER_FTP_HOST }}
-        username: ${{ secrets.HOSTINGER_FTP_USER }}
-        password: ${{ secrets.HOSTINGER_FTP_PASS }}
-        local-dir: prime-and-detonate-step1/dist/
-        server-dir: public_html/
-        exclude: |
-          **/.git*
-          **/.git*/**
-          **/node_modules/**
-          **/.env
-          **/.env.*
+    - name: Deploy built files to deployment branch
+      run: |
+        # Configure git
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        
+        # Create or switch to deployment branch
+        git checkout -B deployment
+        
+        # Copy built files to root
+        cp -r prime-and-detonate-step1/dist/* .
+        
+        # Add and commit
+        git add .
+        git commit -m "Deploy: $(date)" || exit 0
+        
+        # Push to deployment branch
+        git push origin deployment --force
+        
+    - name: Notify Hostinger
+      run: |
+        echo "Built files pushed to 'deployment' branch"
+        echo "Update your Hostinger Git integration to pull from 'deployment' branch instead of 'main'"
