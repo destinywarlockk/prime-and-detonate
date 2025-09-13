@@ -13,7 +13,7 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
       with:
-        token: ${{ secrets.GITHUB_TOKEN }}
+        token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
         fetch-depth: 0
       
     - name: Setup Node.js
@@ -49,8 +49,8 @@ jobs:
         git add .
         git commit -m "Deploy: $(date)" || exit 0
         
-        # Push to deployment branch
-        git push origin deployment --force
+        # Push to deployment branch using Personal Access Token
+        git push https://${{ secrets.PERSONAL_ACCESS_TOKEN }}@github.com/${{ github.repository }}.git deployment --force
         
     - name: Notify Hostinger
       run: |
