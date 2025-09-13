@@ -1,0 +1,6 @@
+[
+  { "id": "nova", "name": "Nova", "classId": "vanguard", "baseBars": { "sh": 35, "hp": 130, "sp": 0 }, "abilitySlots": 5 },
+  { "id": "volt", "name": "Volt", "classId": "technomancer", "baseBars": { "sh": 45, "hp": 105, "sp": 0 }, "abilitySlots": 5 }
+]
+
+

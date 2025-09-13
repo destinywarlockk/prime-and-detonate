@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AOE Abilities Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #1a1a1a;
+            color: #ffffff;
+        }
+        .ability-card {
+            background: #2a2a2a;
+            border: 1px solid #444;
+            border-radius: 8px;
+            padding: 16px;
+            margin: 16px 0;
+        }
+        .ability-name {
+            font-size: 18px;
+            font-weight: bold;
+            color: #4CAF50;
+            margin-bottom: 8px;
+        }
+        .ability-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 8px;
+            margin: 12px 0;
+        }
+        .stat {
+            background: #333;
+            padding: 8px;
+            border-radius: 4px;
+            text-align: center;
+        }
+        .stat-label {
+            font-size: 12px;
+            color: #888;
+            margin-bottom: 4px;
+        }
+        .stat-value {
+            font-size: 14px;
+            color: #fff;
+        }
+        .rider {
+            background: #4a4a4a;
+            border-left: 3px solid #FF9800;
+            padding: 8px;
+            margin: 8px 0;
+            font-size: 14px;
+        }
+        .element-kinetic { border-color: #4CAF50; }
+        .element-arc { border-color: #2196F3; }
+        .element-thermal { border-color: #FF5722; }
+        .element-void { border-color: #9C27B0; }
+    </style>
+</head>
+<body>
+    <h1>🎯 AOE Abilities Test</h1>
+    <p>This page demonstrates the four new AOE abilities with their mechanics and properties.</p>
+
+    <div class="ability-card">
+        <div class="ability-name">Nova AOE: Suppressive Barrage</div>
+        <div class="ability-stats">
+            <div class="stat">
+                <div class="stat-label">Element</div>
+                <div class="stat-value element-kinetic">Kinetic</div>
+            </div>
+            <div class="stat">
+                <div class="stat-label">Base Damage</div>
+                <div class="stat-value">15</div>
+            </div>
+            <div class="stat">
+                <div class="stat-label">Super Cost</div>
+                <div class="stat-value">40</div>
+            </div>
+            <div class="stat">
+                <div class="stat-label">Cooldown</div>
+                <div class="stat-value">1 turn</div>
+            </div>
+            <div class="stat">
+                <div class="stat-label">Targets</div>
+                <div class="stat-value">3 random</div>
+            </div>
+            <div class="stat">
+                <div class="stat-label">Super Gain</div>
+                <div class="stat-value">None</div>
+            </div>
+        </div>
+        <div class="rider element-kinetic">
+            <strong>Rider:</strong> Ignores 10% of target's shields for this hit
+        </div>
+    </div>
+
+    <div class="ability-card">
+        <div class="ability-name">Volt AOE: Static Surge</div>
+        <div class="ability-stats">
+            <div class="stat">
+                <div class="stat-label">Element</div>
+                <div class="stat-value element-arc">Arc</div>
+            </div>
+            <div class="stat">
+                <div class="stat-label">Base Damage</div>
+                <div class="stat-value">12</div>
+            </div>
+            <div class="stat">
+                <div class="stat-label">Super Cost</div>
+                <div class="stat-value">40</div>
+            </div>
+            <div class="stat">
+                <div class="stat-label">Cooldown</div>
+                <div class="stat-value">1 turn</div>
+            </div>
+            <div class="stat">
+                <div class="stat-label">Targets</div>
+                <div class="stat-value">All enemies</div>
+            </div>
+            <div class="stat">
+                <div class="stat-label">Super Gain</div>
+                <div class="stat-value">None</div>
+            </div>
+        </div>
+        <div class="rider element-arc">
+            <strong>Rider:</strong> +100% damage vs targets with shields (double damage)
+        </div>
+    </div>
+
+    <div class="ability-card">
+        <div class="ability-name">Ember AOE: Emberwave</div>
+        <div class="ability-stats">
+            <div class="stat">
+                <div class="stat-label">Element</div>
+                <div class="stat-value element-thermal">Thermal</div>
+            </div>
+            <div class="stat">
+                <div class="stat-label">Base Damage</div>
+                <div class="stat-value">8</div>
+            </div>
+            <div class="stat">
+                <div class="stat-label">Super Cost</div>
+                <div class="stat-value">40</div>
+            </div>
+            <div class="stat">
+                <div class="stat-label">Cooldown</div>
+                <div class="stat-value">1 turn</div>
+            </div>
+            <div class="stat">
+                <div class="stat-label">Targets</div>
+                <div class="stat-value">2 random</div>
+            </div>
+            <div class="stat">
+                <div class="stat-label">Super Gain</div>
+                <div class="stat-value">None</div>
+            </div>
+        </div>
+        <div class="rider element-thermal">
+            <strong>Rider:</strong> Applies Burn prime to each hit target
+        </div>
+    </div>
+
+    <div class="ability-card">
+        <div class="ability-name">Shade AOE: Entropy Collapse</div>
+        <div class="ability-stats">
+            <div class="stat">
+                <div class="stat-label">Element</div>
+                <div class="stat-value element-void">Void</div>
+            </div>
+            <div class="stat">
+                <div class="stat-label">Base Damage</div>
+                <div class="stat-value">9</div>
+            </div>
+            <div class="stat">
+                <div class="stat-label">Super Cost</div>
+                <div class="stat-value">40</div>
+            </div>
+            <div class="stat">
+                <div class="stat-label">Cooldown</div>
+                <div class="stat-value">1 turn</div>
+            </div>
+            <div class="stat">
+                <div class="stat-label">Targets</div>
+                <div class="stat-value">2 random</div>
+            </div>
+            <div class="stat">
+                <div class="stat-label">Super Gain</div>
+                <div class="stat-value">None</div>
+            </div>
+        </div>
+        <div class="rider element-void">
+            <strong>Rider:</strong> If target has primes, detonates them for bonus damage and applies Suppress (-25% damage dealt) for 1 turn
+        </div>
+    </div>
+
+    <h2>🎮 How to Test</h2>
+    <ol>
+        <li>Open the main game: <code>index.html</code></li>
+        <li>Go to the Loadout screen</li>
+        <li>Each character should now have their AOE ability automatically equipped</li>
+        <li>Start a battle to test the mechanics</li>
+        <li>Ensure you have at least 40 Super to cast the AOE abilities</li>
+    </ol>
+
+    <h2>🔧 Implementation Details</h2>
+    <ul>
+        <li><strong>Super Cost Gating:</strong> All AOE abilities cost 40 Super and will fail if insufficient</li>
+        <li><strong>No Super Gain:</strong> These abilities grant no Super on hit (grantsSuperOnHit: false)</li>
+        <li><strong>Cooldowns:</strong> 1-turn cooldown prevents spam</li>
+        <li><strong>Targeting:</strong> Supports 'all', 'n-random', and 'n-closest' modes</li>
+        <li><strong>Riders:</strong> Special mechanical effects unique to each ability</li>
+    </ul>
+
+    <h2>🎨 UI Improvements</h2>
+    <ul>
+        <li><strong>AOE Badges:</strong> Orange gradient badges clearly mark AOE abilities in loadout and battle screens</li>
+        <li><strong>Better Descriptions:</strong> Clear, helpful descriptions explain what each AOE ability does</li>
+        <li><strong>Battle Screen Indicators:</strong> AOE abilities show [AOE] suffix in battle for easy identification</li>
+        <li><strong>Loadout Integration:</strong> AOE abilities automatically appear in character loadouts</li>
+    </ul>
+
+    <h2>📊 Expected Test Results</h2>
+    <ul>
+        <li><strong>Case A:</strong> 3 unshielded enemies → Nova deals ~15 each, Volt deals 12 each, Ember deals 8 to 2 with Burn, Shade deals 9 to 2</li>
+        <li><strong>Case B:</strong> 5 shielded enemies → Volt deals 24 to each (double damage)</li>
+        <li><strong>Case C:</strong> Two enemies with Burn → Shade AOE: per target deals 9 + 30, consumes Burn, applies Suppress</li>
+        <li><strong>Super Costs:</strong> Trying to cast any of these at <40 Super fails; doing a Basic (+40 Super) enables the next cast</li>
+        <li><strong>None of these AOEs generate Super from their hits</strong></li>
+    </ul>
+
+    <h2>🎯 Visual Indicators</h2>
+    <div style="background: #2a2a2a; padding: 20px; border-radius: 8px; margin: 20px 0;">
+        <h3>What You'll See:</h3>
+        <ul>
+            <li><strong>Loadout Screen:</strong> Orange "AOE" badges next to ability names</li>
+            <li><strong>Battle Screen:</strong> Abilities show "[AOE]" suffix in ability names</li>
+            <li><strong>Descriptions:</strong> Clear explanations of targeting and effects</li>
+            <li><strong>Stats:</strong> Super cost (40), cooldown (1 turn), and damage values clearly displayed</li>
+        </ul>
+    </div>
+</body>
+</html>

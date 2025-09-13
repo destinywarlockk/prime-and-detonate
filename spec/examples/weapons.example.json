@@ -1,0 +1,6 @@
+[
+  { "id": "none", "name": "None", "basicMult": 0.85, "basicType": "kinetic" },
+  { "id": "det-gauntlet", "name": "Detonator Gauntlet", "detonationDirectMult": 1.25, "detonationSplashMult": 1.5, "basicType": "void" }
+]
+
+

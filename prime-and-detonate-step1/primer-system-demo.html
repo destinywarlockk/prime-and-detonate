@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Primer System Demo - 2×2 Grid Layout</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0f172a;
+            color: #e5e7eb;
+            padding: 20px;
+            margin: 0;
+        }
+        
+        .demo-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            color: #fca5a5;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .demo-section {
+            margin-bottom: 40px;
+        }
+        
+        .demo-title {
+            color: #60a5fa;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+        
+        .enemy-cards-demo {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        /* Enemy card styling - matches the battle screen */
+        .enemy-thumb {
+            display: block;
+            background: rgba(15,23,42,.9);
+            border: 1px solid rgba(100,116,139,.4);
+            border-radius: 8px;
+            padding: 3px;
+            cursor: pointer;
+            box-sizing: border-box;
+            height: 80px;
+            transition: all 150ms ease;
+        }
+        
+        .enemy-thumb--standard {
+            width: 80px;
+        }
+        
+        .enemy-thumb--miniboss {
+            width: 172px;
+        }
+        
+        .enemy-thumb--boss {
+            width: 264px;
+        }
+        
+        /* Element-colored enemy highlight when primed */
+        .enemy-thumb.has-primes {
+            border-color: rgba(148,163,184,.4);
+        }
+        
+        .enemy-thumb.prime-elem--kinetic {
+            border-color: rgba(148,163,184,.6);
+            box-shadow: 0 0 10px rgba(148,163,184,.35), 0 0 20px rgba(148,163,184,.2);
+        }
+        
+        .enemy-thumb.prime-elem--arc {
+            border-color: rgba(56,189,248,.6);
+            box-shadow: 0 0 10px rgba(56,189,248,.35), 0 0 20px rgba(56,189,248,.2);
+        }
+        
+        .enemy-thumb.prime-elem--thermal {
+            border-color: rgba(239,68,68,.6);
+            box-shadow: 0 0 10px rgba(239,68,68,.35), 0 0 20px rgba(239,68,68,.2);
+        }
+        
+        .enemy-thumb.prime-elem--void {
+            border-color: rgba(168,85,247,.6);
+            box-shadow: 0 0 10px rgba(168,85,247,.35), 0 0 20px rgba(168,85,247,.2);
+        }
+        
+        /* Two Balanced Rows Layout */
+        .enemy-thumb__content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            padding: 0;
+        }
+        
+        .enemy-thumb__stats-grid {
+            display: grid;
+            grid-template-columns: 50% 50%;
+            grid-template-rows: 1fr 1fr;
+            gap: 0;
+            width: 100%;
+            align-items: center;
+        }
+        
+        .enemy-thumb__stat-column {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            justify-content: center;
+            padding: 4px 0;
+        }
+        
+        .enemy-thumb__stat-column:first-child {
+            padding-right: 0;
+        }
+        
+        .enemy-thumb__stat-column:last-child {
+            padding-right: 0;
+        }
+        
+        .enemy-thumb__stat-row {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 4px;
+            font-size: 12px;
+            color: #fca5a5;
+            font-weight: 700;
+            font-variant-numeric: tabular-nums;
+        }
+        
+        .enemy-thumb__stat-label {
+            font-size: 11px;
+            opacity: 0.9;
+            line-height: 1.2;
+            margin-bottom: 2px;
+        }
+        
+        .enemy-thumb__stat-value {
+            font-size: 14px;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 4px;
+        }
+        
+        .enemy-thumb__slot-row {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 6px;
+        }
+        
+        .enemy-thumb__slot-dot {
+            width: 11px;
+            height: 11px;
+            border-radius: 50%;
+            border: 1px solid rgba(15,23,42,.9);
+            background: white;
+            flex-shrink: 0;
+            box-shadow: 0 0 0 0 rgba(255,255,255,0);
+        }
+        
+        .enemy-thumb__slot-dot--kinetic {
+            background: rgb(148,163,184);
+            box-shadow: 0 0 4px rgba(148,163,184,0.4);
+        }
+        
+        .enemy-thumb__slot-dot--arc {
+            background: rgb(56,189,248);
+            box-shadow: 0 0 4px rgba(56,189,248,0.4);
+        }
+        
+        .enemy-thumb__slot-dot--thermal {
+            background: rgb(239,68,68);
+            box-shadow: 0 0 4px rgba(239,68,68,0.4);
+        }
+        
+        .enemy-thumb__slot-dot--void {
+            background: rgb(168,85,247);
+            box-shadow: 0 0 4px rgba(168,85,247,0.4);
+        }
+        
+        /* Grunt layout adjustments */
+        .enemy-thumb__stats-grid--grunt {
+            grid-template-columns: 1fr;
+        }
+        .enemy-thumb__stats-grid--grunt .enemy-thumb__stat-column:last-child {
+            align-items: center;
+            justify-content: flex-start;
+        }
+        
+        .demo-description {
+            background: rgba(30,41,59,.6);
+            border: 1px solid rgba(100,116,139,.4);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .demo-description h3 {
+            color: #60a5fa;
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+        
+        .demo-description p {
+            margin: 8px 0;
+            line-height: 1.5;
+        }
+        
+        .demo-description ul {
+            margin: 8px 0;
+            padding-left: 20px;
+        }
+        
+        .demo-description li {
+            margin: 4px 0;
+        }
+        
+        .element-colors {
+            display: flex;
+            gap: 15px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        .element-color {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .element-dot {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            border: 2px solid rgba(255,255,255,.2);
+        }
+        
+        .element-dot--kinetic { background: rgb(148,163,184); }
+        .element-dot--arc { background: rgb(56,189,248); }
+        .element-dot--thermal { background: rgb(239,68,68); }
+        .element-dot--void { background: rgb(168,85,247); }
+    </style>
+</head>
+<body>
+    <div class="demo-container">
+        <h1>🎯 Primer System Demo - 2×2 Grid Layout</h1>
+        
+        <div class="demo-description">
+            <h3>New Primer System Overview</h3>
+            <p>The enemy cards now use a balanced two-row layout that prevents layout shift:</p>
+            <ul>
+                <li><strong>Row 1:</strong> Stats with labels stacked above numbers (SH left, HP right)</li>
+                <li><strong>Row 2:</strong> Primer slots aligned under their respective stats</li>
+                <li><strong>Primer slots:</strong> 11px dots with element colors and subtle glow effects</li>
+                <li><strong>Balanced layout:</strong> Both rows take equal vertical space for visual balance</li>
+                <li><strong>Grunts:</strong> SH column is hidden for grunt enemies</li>
+            </ul>
+        </div>
+        
+        <div class="element-colors">
+            <div class="element-color">
+                <div class="element-dot element-dot--kinetic"></div>
+                <span>Kinetic (Gray)</span>
+            </div>
+            <div class="element-color">
+                <div class="element-dot element-dot--arc"></div>
+                <span>Arc (Blue)</span>
+            </div>
+            <div class="element-color">
+                <div class="element-dot element-dot--thermal"></div>
+                <span>Thermal (Red)</span>
+            </div>
+            <div class="element-color">
+                <div class="element-dot element-dot--void"></div>
+                <span>Void (Purple)</span>
+            </div>
+        </div>
+        
+        <div class="demo-section">
+            <div class="demo-title">Enemy Cards - Different Primer States</div>
+            <div class="enemy-cards-demo">
+                
+                <!-- Grunt (No SH) -->
+                <div class="enemy-thumb enemy-thumb--standard">
+                    <div class="enemy-thumb__content">
+                        <div class="enemy-thumb__stats-grid enemy-thumb__stats-grid--grunt">
+                            <div class="enemy-thumb__stat-column" style="display: none;">
+                                <div class="enemy-thumb__stat-row">
+                                    <span class="enemy-thumb__stat-label">SH</span>
+                                    <span class="enemy-thumb__stat-value">0</span>
+                                </div>
+                                <div class="enemy-thumb__slot-row">
+                                    <div class="enemy-thumb__slot-dot" title="Empty slot 1"></div>
+                                </div>
+                            </div>
+                            <div class="enemy-thumb__stat-column" style="grid-column: 1 / -1;">
+                                <div class="enemy-thumb__stat-row">
+                                    <span class="enemy-thumb__stat-label">HP</span>
+                                    <span class="enemy-thumb__stat-value">100</span>
+                                </div>
+                                <div class="enemy-thumb__slot-row">
+                                    <div class="enemy-thumb__slot-dot" title="Empty slot 1"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Standard Enemy (No Primes) -->
+                <div class="enemy-thumb enemy-thumb--standard">
+                    <div class="enemy-thumb__content">
+                        <div class="enemy-thumb__stats-grid">
+                            <div class="enemy-thumb__stat-column">
+                                <div class="enemy-thumb__stat-row">
+                                    <span class="enemy-thumb__stat-label">SH</span>
+                                    <span class="enemy-thumb__stat-value">85</span>
+                                </div>
+                                <div class="enemy-thumb__slot-row">
+                                    <div class="enemy-thumb__slot-dot" title="Empty slot 1"></div>
+                                </div>
+                            </div>
+                            <div class="enemy-thumb__stat-column">
+                                <div class="enemy-thumb__stat-row">
+                                    <span class="enemy-thumb__stat-label">HP</span>
+                                    <span class="enemy-thumb__stat-value">100</span>
+                                </div>
+                                <div class="enemy-thumb__slot-row">
+                                    <div class="enemy-thumb__slot-dot" title="Empty slot 2"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Single Prime (Slot 1) -->
+                <div class="enemy-thumb enemy-thumb--standard has-primes prime-elem--thermal">
+                    <div class="enemy-thumb__content">
+                        <div class="enemy-thumb__stats-grid">
+                            <div class="enemy-thumb__stat-column">
+                                <div class="enemy-thumb__stat-row">
+                                    <span class="enemy-thumb__stat-label">SH</span>
+                                    <span class="enemy-thumb__stat-value">65</span>
+                                </div>
+                                <div class="enemy-thumb__slot-row">
+                                    <div class="enemy-thumb__slot-dot enemy-thumb__slot-dot--thermal" title="Thermal prime in slot 1"></div>
+                                </div>
+                            </div>
+                            <div class="enemy-thumb__stat-column">
+                                <div class="enemy-thumb__stat-row">
+                                    <span class="enemy-thumb__stat-label">HP</span>
+                                    <span class="enemy-thumb__stat-value">100</span>
+                                </div>
+                                <div class="enemy-thumb__slot-row">
+                                    <div class="enemy-thumb__slot-dot" title="Empty slot 2"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Two Primes (Mixed Elements) -->
+                <div class="enemy-thumb enemy-thumb--standard has-primes prime-elem--arc">
+                    <div class="enemy-thumb__content">
+                        <div class="enemy-thumb__stats-grid">
+                            <div class="enemy-thumb__stat-column">
+                                <div class="enemy-thumb__stat-row">
+                                    <span class="enemy-thumb__stat-label">SH</span>
+                                    <span class="enemy-thumb__stat-value">45</span>
+                                </div>
+                                <div class="enemy-thumb__slot-row">
+                                    <div class="enemy-thumb__slot-dot enemy-thumb__slot-dot--arc" title="Arc prime in slot 1"></div>
+                                </div>
+                            </div>
+                            <div class="enemy-thumb__stat-column">
+                                <div class="enemy-thumb__stat-row">
+                                    <span class="enemy-thumb__stat-label">HP</span>
+                                    <span class="enemy-thumb__stat-value">100</span>
+                                </div>
+                                <div class="enemy-thumb__slot-row">
+                                    <div class="enemy-thumb__slot-dot enemy-thumb__slot-dot--void" title="Void prime in slot 2"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Miniboss with Primes -->
+                <div class="enemy-thumb enemy-thumb--miniboss has-primes prime-elem--void">
+                    <div class="enemy-thumb__content">
+                        <div class="enemy-thumb__stats-grid">
+                            <div class="enemy-thumb__stat-column">
+                                <div class="enemy-thumb__stat-row">
+                                    <span class="enemy-thumb__stat-label">SH</span>
+                                    <span class="enemy-thumb__stat-value">120</span>
+                                </div>
+                                <div class="enemy-thumb__slot-row">
+                                    <div class="enemy-thumb__slot-dot enemy-thumb__slot-dot--void" title="Void prime in slot 1"></div>
+                                </div>
+                            </div>
+                            <div class="enemy-thumb__stat-column">
+                                <div class="enemy-thumb__stat-row">
+                                    <span class="enemy-thumb__stat-label">HP</span>
+                                    <span class="enemy-thumb__stat-value">150</span>
+                                </div>
+                                <div class="enemy-thumb__slot-row">
+                                    <div class="enemy-thumb__slot-dot enemy-thumb__slot-dot--kinetic" title="Kinetic prime in slot 2"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Boss with Full Primes -->
+                <div class="enemy-thumb enemy-thumb--boss has-primes prime-elem--thermal">
+                    <div class="enemy-thumb__content">
+                        <div class="enemy-thumb__stats-grid">
+                            <div class="enemy-thumb__stat-column">
+                                <div class="enemy-thumb__stat-row">
+                                    <span class="enemy-thumb__stat-label">SH</span>
+                                    <span class="enemy-thumb__stat-value">200</span>
+                                </div>
+                                <div class="enemy-thumb__slot-row">
+                                    <div class="enemy-thumb__slot-dot enemy-thumb__slot-dot--thermal" title="Thermal prime in slot 1"></div>
+                                </div>
+                            </div>
+                            <div class="enemy-thumb__stat-column">
+                                <div class="enemy-thumb__stat-row">
+                                    <span class="enemy-thumb__stat-label">HP</span>
+                                    <span class="enemy-thumb__stat-value">300</span>
+                                </div>
+                                <div class="enemy-thumb__slot-row">
+                                    <div class="enemy-thumb__slot-dot enemy-thumb__slot-dot--arc" title="Arc prime in slot 2"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="demo-description">
+            <h3>Technical Implementation Details</h3>
+            <ul>
+                <li><strong>Grid Layout:</strong> CSS Grid with 2 columns (50% each) and 2 balanced rows (1fr each)</li>
+                <li><strong>Right Alignment:</strong> All content is right-aligned within columns with 6px right padding</li>
+                <li><strong>Stacked Labels:</strong> Labels are positioned above values for better readability</li>
+                <li><strong>Slot Dots:</strong> 11px diameter circles with element-specific colors and subtle glow effects</li>
+                <li><strong>Tabular Numerals:</strong> Uses <code>font-variant-numeric: tabular-nums</code> to prevent digit jitter</li>
+                <li><strong>Fixed Sizing:</strong> Content area maintains consistent dimensions to prevent layout shift</li>
+                <li><strong>Element Colors:</strong> Pulled from existing game color tokens with subtle glow effects</li>
+                <li><strong>Grunts:</strong> SH column is hidden using <code>display: none</code> for grunt enemies</li>
+            </ul>
+        </div>
+        
+        <div class="demo-description">
+            <h3>Primer Logic</h3>
+            <ul>
+                <li><strong>First Prime:</strong> Fills Slot 1 (left column, under SH)</li>
+                <li><strong>Second Prime:</strong> Fills Slot 2 (right column, under HP)</li>
+                <li><strong>Mixed Primes:</strong> Each slot displays the color of the element that filled it</li>
+                <li><strong>Clear on Detonate:</strong> Both dots clear when primes are detonated or expire</li>
+                <li><strong>Visual Feedback:</strong> Card border and glow match the first prime element</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

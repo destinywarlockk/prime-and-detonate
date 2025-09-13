@@ -1,0 +1,22 @@
+{
+  "Grunt": {
+    "tier": "Grunt",
+    "mult": { "hp": 0.5, "shields": 0.6, "speed": 1.1, "damage": 0.6 },
+    "ai": { "targetDiscipline": 0.2, "primeResistMod": 1.0 },
+    "spawnWeight": 60,
+    "lootTier": "Common",
+    "abilitySlots": { "primers": 1, "detonators": 0, "nukes": 1 },
+    "nameFormat": "${base} Grunt"
+  },
+  "Elite": {
+    "tier": "Elite",
+    "mult": { "hp": 1.1, "shields": 1.0, "speed": 1.0, "damage": 1.0 },
+    "ai": { "preferDetonation": 0.2, "preferPrimers": 0.2, "targetDiscipline": 0.5, "counterChance": 0.05, "primeResistMod": 0.95 },
+    "spawnWeight": 30,
+    "lootTier": "Uncommon",
+    "abilitySlots": { "primers": 1, "detonators": 1, "nukes": 1 },
+    "nameFormat": "${base} Elite"
+  }
+}
+
+

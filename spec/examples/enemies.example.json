@@ -1,0 +1,17 @@
+[
+  {
+    "key": "syndicate_raptor",
+    "name": "Syndicate Raptor",
+    "faction": "Syndicate",
+    "role": "Skirmisher",
+    "baseStats": { "hp": 72, "shields": 40, "speed": 10, "damage": 20 },
+    "abilities": [
+      { "id": "smart_shot", "display": "Smart Shot", "damageType": "kinetic", "aiWeight": 0.5 },
+      { "id": "arc_net", "display": "Arc Net", "damageType": "arc", "isPrimer": true, "primeType": "overload", "aiWeight": 0.3 },
+      { "id": "detpack", "display": "DetPack", "damageType": "thermal", "isDetonator": true, "aiWeight": 0.2 }
+    ],
+    "tags": ["Elite"]
+  }
+]
+
+

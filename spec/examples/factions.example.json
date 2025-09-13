@@ -1,0 +1,24 @@
+{
+  "Voidborn": {
+    "id": "Voidborn",
+    "hpMult": 1.3,
+    "shMult": 1.0,
+    "spdMult": 0.85,
+    "dmgMult": 1.15,
+    "resistVuln": { "void": 0.8, "arc": 1.2, "thermal": 1.4, "kinetic": 1.0 },
+    "primeMods": { "applyChanceBonus": { "suppress": 0.15, "pierce": 0.10 }, "durationMod": { "suppress": 1.2 } },
+    "specials": { "regenPerTurn": 2 }
+  },
+  "Syndicate": {
+    "id": "Syndicate",
+    "hpMult": 1.0,
+    "shMult": 1.15,
+    "spdMult": 1.15,
+    "dmgMult": 1.25,
+    "resistVuln": { "arc": 1.0, "thermal": 1.0, "void": 1.4, "kinetic": 1.0 },
+    "primeMods": { "applyChanceBonus": { "overload": 0.05, "burn": 0.05, "suppress": 0.05 } },
+    "specials": { "counterChance": 0.1 }
+  }
+}
+
+

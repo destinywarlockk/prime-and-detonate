@@ -1,0 +1,29 @@
+[
+  {
+    "id": "basic-attack-kinetic",
+    "name": "Basic Attack",
+    "type": "kinetic",
+    "role": "prime",
+    "baseDamage": 12,
+    "primesApplied": 1,
+    "primeType": "weakpoint",
+    "allowedClasses": ["vanguard"],
+    "tags": { "prime": true, "primeElement": "kinetic", "primeName": "Weakpoint" },
+    "targeting": { "mode": "single" }
+  },
+  {
+    "id": "rail-shot",
+    "name": "Rail Shot",
+    "type": "kinetic",
+    "role": "detonator",
+    "baseDamage": 25,
+    "detonates": true,
+    "detonationTriggers": ["weakpoint", "overload", "burn", "suppress", "freeze"],
+    "splashFactor": 0.3,
+    "allowedClasses": ["vanguard"],
+    "tags": { "detonator": true },
+    "targeting": { "mode": "single" }
+  }
+]
+
+

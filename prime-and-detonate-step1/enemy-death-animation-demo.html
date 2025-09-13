@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enemy Death Animation Demo</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background: #0f172a;
+            color: #e2e8f0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        
+        .demo-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .demo-title {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #f8fafc;
+        }
+        
+        .enemy-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 80px);
+            gap: 12px;
+            margin: 20px 0;
+            justify-content: center;
+        }
+        
+        .enemy-thumb {
+            display: flex;
+            background: rgba(15,23,42,.9);
+            border: 1px solid rgba(100,116,139,.4);
+            border-radius: 8px;
+            padding: 3px;
+            cursor: pointer;
+            box-sizing: border-box;
+            height: 94px;
+            min-height: 94px;
+            transition: all 150ms ease;
+            position: relative;
+        }
+        
+        .enemy-thumb__content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            height: 100%;
+            min-height: 100%;
+            padding: 4px;
+            box-sizing: border-box;
+        }
+        
+        .enemy-thumb__icon {
+            width: 40px;
+            height: 40px;
+            object-fit: cover;
+            border-radius: 4px;
+            margin-bottom: 4px;
+            flex-shrink: 0;
+            background: rgba(15,23,42,.6);
+            border: 1px solid rgba(100,116,139,.3);
+        }
+        
+        .enemy-thumb__simple-layout {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            flex: 1;
+            margin-top: 2px;
+        }
+        
+        .enemy-thumb__stat-line {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .enemy-thumb__hp-value {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 2px;
+            font-size: 10px;
+            color: #ef4444;
+            font-weight: 700;
+            font-variant-numeric: tabular-nums;
+        }
+        
+        .enemy-thumb__heart {
+            color: #ef4444;
+            font-size: 11px;
+        }
+        
+        .enemy-thumb__primer-dots {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+        
+        .enemy-thumb__slot-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            border: 1px solid rgba(15,23,42,.9);
+            background: white;
+            flex-shrink: 0;
+        }
+        
+        /* Death animation classes */
+        .enemy-thumb.is-dying {
+            animation: enemyDeath 1.2s ease-in-out forwards;
+            pointer-events: none;
+            cursor: default;
+        }
+        
+        .enemy-thumb.is-dead {
+            opacity: 0.3;
+            filter: grayscale(80%) brightness(0.6);
+            transform: scale(0.95);
+            pointer-events: none;
+            cursor: default;
+        }
+        
+        /* Death animation keyframes */
+        @keyframes enemyDeath {
+            0% {
+                transform: scale(1) rotate(0deg);
+                opacity: 1;
+                filter: grayscale(0%) brightness(1);
+            }
+            25% {
+                transform: scale(1.1) rotate(-2deg);
+                opacity: 0.9;
+                filter: grayscale(20%) brightness(1.1);
+            }
+            50% {
+                transform: scale(0.9) rotate(2deg);
+                opacity: 0.7;
+                filter: grayscale(40%) brightness(0.9);
+            }
+            75% {
+                transform: scale(0.8) rotate(-1deg);
+                opacity: 0.5;
+                filter: grayscale(60%) brightness(0.7);
+            }
+            100% {
+                transform: scale(0.95) rotate(0deg);
+                opacity: 0.3;
+                filter: grayscale(80%) brightness(0.6);
+            }
+        }
+        
+        /* Death particle effects */
+        .enemy-thumb__death-particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 10;
+        }
+        
+        .enemy-thumb__death-particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(239, 68, 68, 0.8);
+            border-radius: 50%;
+            animation: deathParticle 0.8s ease-out forwards;
+        }
+        
+        @keyframes deathParticle {
+            0% {
+                opacity: 1;
+                transform: scale(1) translate(0, 0);
+            }
+            100% {
+                opacity: 0;
+                transform: scale(0) translate(var(--particle-x), var(--particle-y));
+            }
+        }
+        
+        /* Element-specific death effects */
+        .enemy-thumb.is-dying.prime-elem--kinetic .enemy-thumb__death-particle {
+            background: rgba(148, 163, 184, 0.8);
+        }
+        
+        .enemy-thumb.is-dying.prime-elem--arc .enemy-thumb__death-particle {
+            background: rgba(56, 189, 248, 0.8);
+        }
+        
+        .enemy-thumb.is-dying.prime-elem--thermal .enemy-thumb__death-particle {
+            background: rgba(239, 68, 68, 0.8);
+        }
+        
+        .enemy-thumb.is-dying.prime-elem--void .enemy-thumb__death-particle {
+            background: rgba(168, 85, 247, 0.8);
+        }
+        
+        /* Enhanced death state styling */
+        .enemy-thumb.is-dying {
+            z-index: 20;
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.4);
+        }
+        
+        .enemy-thumb.is-dying.prime-elem--kinetic {
+            box-shadow: 0 0 20px rgba(148, 163, 184, 0.4);
+        }
+        
+        .enemy-thumb.is-dying.prime-elem--arc {
+            box-shadow: 0 0 20px rgba(56, 189, 248, 0.4);
+        }
+        
+        .enemy-thumb.is-dying.prime-elem--thermal {
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.4);
+        }
+        
+        .enemy-thumb.is-dying.prime-elem--void {
+            box-shadow: 0 0 20px rgba(168, 85, 247, 0.4);
+        }
+        
+        .controls {
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .btn {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 0 10px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        .btn:hover {
+            background: #2563eb;
+        }
+        
+        .btn:disabled {
+            background: #6b7280;
+            cursor: not-allowed;
+        }
+        
+        .demo-info {
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(100, 116, 139, 0.3);
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .demo-info h3 {
+            margin-top: 0;
+            color: #f8fafc;
+        }
+        
+        .demo-info ul {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+        
+        .demo-info li {
+            margin: 5px 0;
+            color: #cbd5e1;
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-container">
+        <h1 class="demo-title">Enemy Death Animation Demo</h1>
+        
+        <div class="demo-info">
+            <h3>How to Test:</h3>
+            <ul>
+                <li>Click on any enemy to trigger its death animation</li>
+                <li>Each enemy has different element types (kinetic, arc, thermal, void)</li>
+                <li>Death animation includes scaling, rotation, grayscale, and particle effects</li>
+                <li>Animation lasts 1.2 seconds with element-specific particle colors</li>
+                <li>After animation, enemies become semi-transparent and non-interactive</li>
+            </ul>
+        </div>
+        
+        <div class="controls">
+            <button class="btn" onclick="resetAll()">Reset All</button>
+            <button class="btn" onclick="killRandom()">Kill Random</button>
+        </div>
+        
+        <div class="enemy-grid">
+            <div class="enemy-thumb prime-elem--kinetic" onclick="killEnemy(this, 'kinetic')">
+                <div class="enemy-thumb__content">
+                    <div class="enemy-thumb__icon">🛡️</div>
+                    <div class="enemy-thumb__simple-layout">
+                        <div class="enemy-thumb__stat-line">
+                            <span class="enemy-thumb__hp-value">
+                                <span class="enemy-thumb__heart">♥</span>100
+                            </span>
+                        </div>
+                        <div class="enemy-thumb__primer-dots">
+                            <div class="enemy-thumb__slot-dot"></div>
+                            <div class="enemy-thumb__slot-dot"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="enemy-thumb prime-elem--arc" onclick="killEnemy(this, 'arc')">
+                <div class="enemy-thumb__content">
+                    <div class="enemy-thumb__icon">⚡</div>
+                    <div class="enemy-thumb__simple-layout">
+                        <div class="enemy-thumb__stat-line">
+                            <span class="enemy-thumb__hp-value">
+                                <span class="enemy-thumb__heart">♥</span>100
+                            </span>
+                        </div>
+                        <div class="enemy-thumb__primer-dots">
+                            <div class="enemy-thumb__slot-dot"></div>
+                            <div class="enemy-thumb__slot-dot"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="enemy-thumb prime-elem--thermal" onclick="killEnemy(this, 'thermal')">
+                <div class="enemy-thumb__content">
+                    <div class="enemy-thumb__icon">🔥</div>
+                    <div class="enemy-thumb__simple-layout">
+                        <div class="enemy-thumb__stat-line">
+                            <span class="enemy-thumb__hp-value">
+                                <span class="enemy-thumb__heart">♥</span>100
+                            </span>
+                        </div>
+                        <div class="enemy-thumb__primer-dots">
+                            <div class="enemy-thumb__slot-dot"></div>
+                            <div class="enemy-thumb__slot-dot"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="enemy-thumb prime-elem--void" onclick="killEnemy(this, 'thermal')">
+                <div class="enemy-thumb__content">
+                    <div class="enemy-thumb__icon">💫</div>
+                    <div class="enemy-thumb__simple-layout">
+                        <div class="enemy-thumb__stat-line">
+                            <span class="enemy-thumb__hp-value">
+                                <span class="enemy-thumb__heart">♥</span>100
+                            </span>
+                        </div>
+                        <div class="enemy-thumb__primer-dots">
+                            <div class="enemy-thumb__slot-dot"></div>
+                            <div class="enemy-thumb__slot-dot"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function generateDeathParticles(element, tier) {
+            const particles = [];
+            const particleCount = tier === 'Boss' ? 8 : tier === 'Miniboss' ? 6 : tier === 'Elite' ? 4 : 2;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const angle = (i / particleCount) * Math.PI * 2;
+                const distance = 20 + Math.random() * 30;
+                const x = Math.cos(angle) * distance;
+                const y = Math.sin(angle) * distance;
+                
+                particles.push(`
+                    <div class="enemy-thumb__death-particle" 
+                         style="--particle-x: ${x}px; --particle-y: ${y}px; 
+                                left: 50%; top: 50%; margin-left: -2px; margin-top: -2px; 
+                                animation-delay: ${i * 0.1}s;"></div>
+                `);
+            }
+            
+            return `<div class="enemy-thumb__death-particles">${particles.join('')}</div>`;
+        }
+        
+        function killEnemy(enemyElement, elementType) {
+            if (enemyElement.classList.contains('is-dying') || enemyElement.classList.contains('is-dead')) {
+                return; // Already dying or dead
+            }
+            
+            // Add dying class and particles
+            enemyElement.classList.add('is-dying');
+            enemyElement.classList.add(`prime-elem--${elementType}`);
+            
+            // Add death particles
+            const particles = generateDeathParticles(elementType, 'Grunt');
+            enemyElement.insertAdjacentHTML('beforeend', particles);
+            
+            // After animation completes, mark as dead
+            setTimeout(() => {
+                enemyElement.classList.remove('is-dying');
+                enemyElement.classList.add('is-dead');
+                
+                // Remove particles
+                const particleContainer = enemyElement.querySelector('.enemy-thumb__death-particles');
+                if (particleContainer) {
+                    particleContainer.remove();
+                }
+            }, 1200);
+        }
+        
+        function resetAll() {
+            const enemies = document.querySelectorAll('.enemy-thumb');
+            enemies.forEach(enemy => {
+                enemy.classList.remove('is-dying', 'is-dead');
+                const particles = enemy.querySelector('.enemy-thumb__death-particles');
+                if (particles) {
+                    particles.remove();
+                }
+            });
+        }
+        
+        function killRandom() {
+            const enemies = document.querySelectorAll('.enemy-thumb:not(.is-dying):not(.is-dead)');
+            if (enemies.length > 0) {
+                const randomEnemy = enemies[Math.floor(Math.random() * enemies.length)];
+                const elementType = randomEnemy.classList.contains('prime-elem--kinetic') ? 'kinetic' :
+                                  randomEnemy.classList.contains('prime-elem--arc') ? 'arc' :
+                                  randomEnemy.classList.contains('prime-elem--thermal') ? 'thermal' : 'void';
+                killEnemy(randomEnemy, elementType);
+            }
+        }
+    </script>
+</body>
+</html>

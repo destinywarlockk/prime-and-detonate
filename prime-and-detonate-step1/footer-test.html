@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Footer Test - Mobile Debug</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0b0f1a;
+            color: #e6ecf1;
+            height: 100vh;
+            height: -webkit-fill-available;
+            width: 100vw;
+        }
+
+        .container {
+            height: 100vh;
+            height: -webkit-fill-available;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            padding-bottom: 200px;
+            -webkit-overflow-scrolling: touch;
+            scroll-behavior: smooth;
+        }
+
+        .test-section {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .test-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #f8fafc;
+        }
+
+        .test-text {
+            font-size: 14px;
+            color: #cbd5e1;
+            line-height: 1.5;
+        }
+
+        .footer {
+            position: fixed !important;
+            bottom: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            z-index: 9999 !important;
+            background: #0b0f1a !important;
+            border-top: 3px solid #3b82f6 !important;
+            padding: 16px max(12px, env(safe-area-inset-left)) 16px max(12px, env(safe-area-inset-right)) !important;
+            padding-bottom: max(16px, calc(16px + env(safe-area-inset-bottom))) !important;
+            box-sizing: border-box !important;
+            min-height: 150px !important;
+            width: 100vw !important;
+            max-width: 100vw !important;
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.8) !important;
+        }
+
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .footer-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-button {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 20px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            min-height: 44px;
+        }
+
+        .footer-button.ghost {
+            background: transparent;
+            color: #e2e8f0;
+            border: 1px solid #374151;
+        }
+
+        .footer-button:hover {
+            opacity: 0.8;
+        }
+
+        .debug-info {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-family: monospace;
+            z-index: 10000;
+        }
+
+        .scroll-indicator {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-family: monospace;
+            z-index: 10000;
+        }
+
+        @media (max-width: 768px) {
+            .footer {
+                position: fixed !important;
+                bottom: 0 !important;
+                left: 0 !important;
+                right: 0 !important;
+                width: 100vw !important;
+                max-width: 100vw !important;
+                z-index: 9999 !important;
+            }
+        }
+
+        @media screen and (max-width: 428px) {
+            .footer {
+                position: fixed !important;
+                bottom: 0 !important;
+                left: 0 !important;
+                right: 0 !important;
+                width: 100vw !important;
+                max-width: 100vw !important;
+                z-index: 9999 !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Debug Info -->
+        <div class="debug-info" id="debugInfo">
+            Loading...
+        </div>
+
+        <!-- Scroll Indicator -->
+        <div class="scroll-indicator" id="scrollIndicator">
+            Scroll: 0px
+        </div>
+
+        <!-- Scrollable Content -->
+        <div class="content">
+            <div class="test-section">
+                <div class="test-title">Footer Visibility Test</div>
+                <div class="test-text">
+                    This page tests if the fixed footer is visible on mobile devices, especially iPhone.
+                    Scroll down to see if the footer appears at the bottom of the screen.
+                </div>
+            </div>
+
+            <div class="test-section">
+                <div class="test-title">Viewport Information</div>
+                <div class="test-text">
+                    Check the debug info in the top-right corner for viewport dimensions and safe area insets.
+                    The footer should be visible at the bottom with a blue border.
+                </div>
+            </div>
+
+            <div class="test-section">
+                <div class="test-title">Test Content 1</div>
+                <div class="test-text">
+                    This is test content to ensure there's enough scrolling to test the footer positioning.
+                    The footer should remain fixed at the bottom while you scroll through this content.
+                </div>
+            </div>
+
+            <div class="test-section">
+                <div class="test-title">Test Content 2</div>
+                <div class="test-text">
+                    More test content to fill the page. The footer should be visible at the bottom of the viewport
+                    regardless of scroll position.
+                </div>
+            </div>
+
+            <div class="test-section">
+                <div class="test-title">Test Content 3</div>
+                <div class="test-text">
+                    Additional content to test scrolling behavior. The footer should stay in place at the bottom.
+                </div>
+            </div>
+
+            <div class="test-section">
+                <div class="test-title">Test Content 4</div>
+                <div class="test-text">
+                    Final test content. If you can see this and the footer below, the implementation is working correctly.
+                </div>
+            </div>
+
+            <div class="test-section">
+                <div class="test-title">Test Content 5</div>
+                <div class="test-text">
+                    Additional content to ensure scrolling is possible. The footer should remain visible at the bottom.
+                </div>
+            </div>
+
+            <div class="test-section">
+                <div class="test-title">Test Content 6</div>
+                <div class="test-text">
+                    More content to fill the page. Scroll down to see the footer at the bottom of the viewport.
+                </div>
+            </div>
+
+            <div class="test-section">
+                <div class="test-title">Test Content 7</div>
+                <div class="test-text">
+                    Even more content. The footer should stay fixed at the bottom while you scroll through this.
+                </div>
+            </div>
+
+            <div class="test-section">
+                <div class="test-title">Test Content 8</div>
+                <div class="test-text">
+                    Final test section. If you can scroll to this point and still see the footer, everything is working correctly.
+                </div>
+            </div>
+        </div>
+
+        <!-- Fixed Footer -->
+        <div class="footer">
+            <div class="footer-content">
+                <div class="footer-row">
+                    <div style="color: #f8fafc; font-weight: 600;">Footer Test</div>
+                    <button class="footer-button ghost">Clear</button>
+                </div>
+                <div class="footer-row" style="gap: 10px;">
+                    <button class="footer-button ghost">Escape</button>
+                    <button class="footer-button ghost">‹</button>
+                    <button class="footer-button ghost">›</button>
+                    <button class="footer-button">Use</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function updateDebugInfo() {
+            const debugInfo = document.getElementById('debugInfo');
+            const viewport = {
+                width: window.innerWidth,
+                height: window.innerHeight,
+                visualViewport: window.visualViewport ? {
+                    width: window.visualViewport.width,
+                    height: window.visualViewport.height,
+                    scale: window.visualViewport.scale
+                } : 'not supported'
+            };
+
+            const safeAreas = {
+                top: getComputedStyle(document.documentElement).getPropertyValue('env(safe-area-inset-top') || '0px',
+                bottom: getComputedStyle(document.documentElement).getPropertyValue('env(safe-area-inset-bottom') || '0px',
+                left: getComputedStyle(document.documentElement).getPropertyValue('env(safe-area-inset-left') || '0px',
+                right: getComputedStyle(document.documentElement).getPropertyValue('env(safe-area-inset-right') || '0px'
+            };
+
+            debugInfo.innerHTML = `
+                <strong>Viewport:</strong><br>
+                ${viewport.width} × ${viewport.height}<br>
+                <strong>Visual Viewport:</strong><br>
+                ${viewport.visualViewport === 'not supported' ? 'not supported' : 
+                  `${viewport.visualViewport.width} × ${viewport.visualViewport.height} (${viewport.visualViewport.scale}x)`}<br>
+                <strong>Safe Areas:</strong><br>
+                T:${safeAreas.top} B:${safeAreas.bottom}<br>
+                L:${safeAreas.left} R:${safeAreas.right}
+            `;
+        }
+
+        // Update debug info on load and resize
+        window.addEventListener('load', updateDebugInfo);
+        window.addEventListener('resize', updateDebugInfo);
+        window.addEventListener('orientationchange', updateDebugInfo);
+
+        // Track scroll position
+        const content = document.querySelector('.content');
+        const scrollIndicator = document.getElementById('scrollIndicator');
+        
+        if (content) {
+            content.addEventListener('scroll', function() {
+                const scrollTop = this.scrollTop;
+                const scrollHeight = this.scrollHeight;
+                const clientHeight = this.clientHeight;
+                const maxScroll = scrollHeight - clientHeight;
+                const scrollPercent = Math.round((scrollTop / maxScroll) * 100);
+                
+                scrollIndicator.innerHTML = `
+                    Scroll: ${scrollTop}px<br>
+                    Max: ${maxScroll}px<br>
+                    ${scrollPercent}%
+                `;
+                
+                console.log('Scroll position:', {
+                    scrollTop,
+                    scrollHeight,
+                    clientHeight,
+                    maxScroll,
+                    scrollPercent
+                });
+            });
+        }
+
+        // Log additional info to console
+        console.log('Footer test page loaded');
+        console.log('Viewport dimensions:', {
+            width: window.innerWidth,
+            height: window.innerHeight,
+            visualViewport: window.visualViewport ? {
+                width: window.visualViewport.width,
+                height: window.visualViewport.height,
+                scale: window.visualViewport.scale
+            } : 'not supported'
+        });
+
+        // Test if footer element exists and is positioned correctly
+        setTimeout(() => {
+            const footer = document.querySelector('.footer');
+            if (footer) {
+                const rect = footer.getBoundingClientRect();
+                console.log('Footer element found:', {
+                    exists: true,
+                    position: getComputedStyle(footer).position,
+                    bottom: rect.bottom,
+                    top: rect.top,
+                    height: rect.height,
+                    zIndex: getComputedStyle(footer).zIndex
+                });
+            } else {
+                console.log('Footer element not found');
+            }
+        }, 1000);
+    </script>
+</body>
+</html>
